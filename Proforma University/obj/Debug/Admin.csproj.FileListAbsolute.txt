@@ -1,0 +1,7 @@
+C:\Users\dsparks\source\repos\Proforma University\Proforma University\bin\Debug\Proforma University.exe.config
+C:\Users\dsparks\source\repos\Proforma University\Proforma University\bin\Debug\Proforma University.exe
+C:\Users\dsparks\source\repos\Proforma University\Proforma University\bin\Debug\Proforma University.pdb
+C:\Users\dsparks\source\repos\Proforma University\Proforma University\obj\Debug\Admin.csprojResolveAssemblyReference.cache
+C:\Users\dsparks\source\repos\Proforma University\Proforma University\obj\Debug\Admin.csproj.CoreCompileInputs.cache
+C:\Users\dsparks\source\repos\Proforma University\Proforma University\obj\Debug\Proforma University.exe
+C:\Users\dsparks\source\repos\Proforma University\Proforma University\obj\Debug\Proforma University.pdb
