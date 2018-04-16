@@ -9,7 +9,7 @@ namespace Proforma_University
 {
     class CourseService
     {
-       public CourseService()
+        public CourseService()
         {
 
         }
@@ -24,15 +24,36 @@ namespace Proforma_University
             var reader = query.ExecuteReader();
             var _rv = new List<Course>();
             // parse the results
+            Console.WriteLine("Courses on the list:");
             while (reader.Read())
             {
                 var _course = new Course(reader);
-                Console.WriteLine(_course.CourseName + "was added");
+                Console.WriteLine(_course.CourseName + "Course ID: "+ _course.Id + " Course Number "+ _course.CourseNumber);
+                //Console.WriteLine(_course.CourseName[-1] + _course.CourseNumber[-1] + "was added last");
             }
+
+            reader.Close();
             return _rv;
         }
 
+        public static List<Course> GetSelectedCourse(SqlConnection conn, int courseid)
+        { 
+             var _select = "SELECT Courses.ID, Courses.CourseNumber, Courses.CourseLevel, Courses.CourseName, Courses.RoomNumber, Courses.StartTime, Courses.ProfessorID" +
+                " FROM Courses"+
+                " WHERE Courses.Id = " + courseid;
 
+            var query = new SqlCommand(_select, conn);
+            var reader = query.ExecuteReader();
+            var _rv = new List<Course>();
+            // parse the results
+            while (reader.Read())
+            {
+                var _course = new Course(reader);
+                Console.WriteLine(_course.CourseName + _course.CourseNumber + "was selected");
+            }
+            reader.Close();
+            return _rv;
+        }
 
         public static void InsertCourse(SqlConnection conn, Course newCourse)
         {
@@ -48,6 +69,20 @@ namespace Proforma_University
             cmd.Parameters.AddWithValue("StartTime", newCourse.StartTime);
             cmd.Parameters.AddWithValue("ProfessorID", newCourse.ProfessorID);
             cmd.ExecuteScalar();
+        }
+
+        public static void InsertElectedCourse(SqlConnection conn, ElectedCourse electedcourse)
+        {
+
+            const string V = "           VALUES (@CoursesID, @StudentsID)";
+            var _insert = "INSERT INTO ElectedCourses(CoursesID, StudentsID)" +
+                V;
+            var cmd = new SqlCommand(_insert, conn);
+
+            cmd.Parameters.AddWithValue("CoursesID", electedcourse.CoursesId);
+            cmd.Parameters.AddWithValue("StudentsID", electedcourse.StudentsId);
+            cmd.ExecuteScalar();
+
         }
     }
 }

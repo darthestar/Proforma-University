@@ -39,10 +39,11 @@ namespace Proforma_University
             while (reader.Read())
             {
                 var _professor = new Professor(reader);
-                Console.WriteLine(_professor.Name + "was added");
+                Console.WriteLine(_professor.Title + _professor.Name + "was added");
             }
-            ///Console.ReadLine();
+            reader.Close();
             return _rv;
+            
         }
     }
 }

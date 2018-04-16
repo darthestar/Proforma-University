@@ -33,12 +33,6 @@ namespace Proforma_University
 
                 using (var conn = new SqlConnection(CONNECTION_STRING))
                 {
-                    //var newProfessor = new Professor
-                    //{
-                    //    Name = "Bueller",
-                    //   Title = "Mr.",
-                    //};
-
                     conn.Open();
                     ProfessorService.InsertProfessor(conn, newProfessor);
                     ProfessorService.GetAllProfessors(conn);
@@ -72,19 +66,74 @@ namespace Proforma_University
 
                 using (var conn = new SqlConnection(CONNECTION_STRING))
                 {
-                    //var newCourse = new Course
-                    //{
-                    //    CourseNumber = "100",
-                    //    CourseLevel = "1",
-                    //    CourseName = "Math Level 1",
-                    //    RoomNumber = "10",
-                    //    StartTime = "8AM",
-                    //    ProfessorID = 1
-                    //};
-
                     conn.Open();
                     CourseService.InsertCourse(conn, newcourse);
                     CourseService.GetAllCourses(conn);
+                }
+            }
+            Console.WriteLine("Enter Student Name");
+            var sname = Console.ReadLine();
+            Console.WriteLine("Enter Student Email");
+            var email = Console.ReadLine();
+            Console.WriteLine("Enter Student Phone");
+            var phone = Console.ReadLine();
+            Console.WriteLine("Enter Student Major");
+            var major = Console.ReadLine();
+
+            var newStudent = new Student
+            {
+                StudentName = sname,
+                Email = email,
+                Phone = phone,
+                Major = major,
+            };
+
+            using (var conn = new SqlConnection(CONNECTION_STRING))
+            {
+                conn.Open();
+                StudentService.InsertStudent(conn, newStudent);
+            }
+
+            Console.WriteLine("Enroll or View My Enrolled Class List? Type (enroll) or (view)");
+            reply = Console.ReadLine();
+            if (reply == "enroll")
+            {
+                using (var conn = new SqlConnection(CONNECTION_STRING))
+                {
+                    conn.Open();
+                    CourseService.GetAllCourses(conn);
+                    Console.WriteLine("Enter course ID to enroll");
+                    var answer = Console.ReadLine();
+                    var courseid = Convert.ToInt32(answer);
+                    Console.WriteLine("Enter name");
+                    var enrolleeName = Console.ReadLine();
+
+                    var _select = "SELECT ID, StudentName, Email, Phone, Major" +
+                " FROM Students" +
+                " WHERE Students.StudentName = " + enrolleeName;
+
+                    var query = new SqlCommand(_select, conn);
+                    var reader = query.ExecuteReader();
+                    var _rv = new List<Student>();
+                    var studentid = 0;
+                    // parse the results
+                    
+                    while (reader.Read())
+                    {
+                        var _student = new Student(reader);
+                        studentid = _student.Id;
+                    }
+
+                    reader.Close();
+
+                    var electedCourse = new ElectedCourse
+                    {
+                        CoursesId = courseid,
+                        StudentsId = studentid,
+                    };
+                    Console.WriteLine(electedCourse.StudentsId);
+                    CourseService.GetSelectedCourse(conn, courseid);
+                    CourseService.InsertElectedCourse(conn, electedCourse);
                 }
             }
         }
